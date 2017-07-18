@@ -17,7 +17,15 @@
  */
 #include "chip8.h"
 
-SDL_GLContext setupGraphics(SDL_Window *window, SDL_GLConext *glcontext){
+/*if you just need to blit some pixels
+ glPixelZoom, glPixelStore*, glViewPort, glRasterPos, glDrawPixels
+ PixelZoom and RasterPos set up the draw orientation on the screen and how it's flipped
+ ViewPort adjusts the sub-space of the window in which things are drawn
+ PixelStore lets the GPU know what the alignment of your data is
+ DrawPixels sends your data to the GPU and uses the set parameters to place it in the frame buffer
+ you usually set the zoom and storing once. change the viewport if your window changes size
+  */
+SDL_GLContext setupGraphics(SDL_Window *window, SDL_GLContext glcontext){
 	if(SDL_Init(SDL_INIT_EVERYTHING)<0){
 		printf("could not initialize SDL: %s\n", SDL_GetError());	
 		exit(1);
@@ -44,8 +52,5 @@ void quit(SDL_Window *window){
 void draw(SDL_Renderer *renderer){
 	puts("drawing");
     SDL_RenderSetLogicalSize( renderer, 500, 500 );
-	for(int i; i<32;i++)
-		for(int j; j < 16; j++)
-			SDL_RenderDrawPoint(renderer, i, j); /* incomplete */
 	SDL_RenderPresent(renderer);
 }

@@ -16,21 +16,11 @@
  * =====================================================================================
  */
 
-#include <SDL2/SDL.h>
-#include <GL/gl.h>
 #include <stdlib.h>
+#include <GL/gl.h>
+#include <SDL2/SDL.h>
 
-/*if you just need to blit some pixels
- glPixelZoom, glPixelStore*, glViewPort, glRasterPos, glDrawPixels
- PixelZoom and RasterPos set up the draw orientation on the screen and how it's flipped
- ViewPort adjusts the sub-space of the window in which things are drawn
- PixelStore lets the GPU know what the alignment of your data is
- DrawPixels sends your data to the GPU and uses the set parameters to place it in the frame buffer
- you usually set the zoom and storing once. change the viewport if your window changes size
-  */
-#define white 0xFFFFFF
-#define black 0x000000
-void setupGraphics(SDL_Window *window);
+SDL_GLContext setupGraphics(SDL_Window *window, SDL_GLContext glcontext);
 void setupInput();
 void quit(SDL_Window *window);
 void initialize(SDL_Window *window);

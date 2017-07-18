@@ -15,7 +15,6 @@
  *
  * =====================================================================================
  */
-#include <stdlib.h>
 #include "chip8.h"
 
 /* TODO:
@@ -44,7 +43,6 @@ int main(int argc, char *argv[]){
 	glcontext = setupGraphics(window, glcontext);
 
 	//setupInput();
-	draw(renderer);
 
 	initialize(window);
 	SDL_Event e;
