@@ -52,6 +52,8 @@ int main(int argc, char *argv[]){
 	for(int i = 0; i < 32; i+=2){
 		c8->gfx[i] = 255;	
 	}
+	glDrawPixels(width, height, GL_LUMINANCE, GL_UNSIGNED_BYTE, c8->gfx);
+	SDL_GL_SwapWindow(window);
 	SDL_Event e;
 	while (true){
 		if(e.type == SDL_QUIT)
