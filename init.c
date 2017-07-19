@@ -50,7 +50,7 @@ void initialize(SDL_Window *window){
 
 	fread(buffer, 2, sz, c8->fp);
 
-	for(int i; i < sz; i++)
+	for(int i = 0; i < sz; i++)
 		c8->memory[i + 512] = buffer[i];
 	free(buffer);
 	glDrawPixels(64, 32, GL_LUMINANCE, GL_UNSIGNED_BYTE, c8->gfx);

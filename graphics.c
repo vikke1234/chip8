@@ -50,11 +50,7 @@ SDL_Window *setupWindow(SDL_Window *window){
 	return window;
 }
 SDL_GLContext setupOpenGL(SDL_Window *window, SDL_GLContext glcontext){
-	int width = 64;
-	int height = 32;
 	int zoom = 10;
-	int w_zoom = width * zoom;
-	int h_zoom = height * zoom;
 	
 
 	glcontext = SDL_GL_CreateContext(window);

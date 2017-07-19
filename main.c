@@ -30,9 +30,6 @@
 int main(int argc, char *argv[]){
 	int width = 64;
 	int height = 32;
-	int zoom = 10;
-	int w_zoom = zoom * width;
-	int h_zoom = zoom * height;
 
 
 	if (argc < 2){
