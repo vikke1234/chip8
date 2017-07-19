@@ -31,14 +31,14 @@ void initialize(SDL_Window *window){
 	c8->pc = 0x200; /* counter starts at 0x200 */
 
 	//load font into memory
-	for (int i = 0; i < 80; c8->memory[i] = fontset[i++])
+	for (int i = 0; i < 80; c8->memory[i] = fontset[i], i++)
 		;
 	c8->sound_timer = c8->delay_timer = 0;	
 	
 	c8->fp = fopen(c8->game, "rb");
 	if(c8->fp == NULL){
 		printf("could not open: %s", c8->game);
-		quit(window);
+		quit(window, NULL);
 		exit(1);
 	}
 	fseek(c8->fp, 2L, SEEK_END);
@@ -53,5 +53,7 @@ void initialize(SDL_Window *window){
 	for(int i; i < sz; i++)
 		c8->memory[i + 512] = buffer[i];
 	free(buffer);
+	glDrawPixels(64, 32, GL_LUMINANCE, GL_UNSIGNED_BYTE, c8->gfx);
+	SDL_GL_SwapWindow(window);
 	puts("done");
 }

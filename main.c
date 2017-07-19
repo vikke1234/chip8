@@ -16,6 +16,7 @@
  * =====================================================================================
  */
 #include "chip8.h"
+#include <stdbool.h>
 
 /* TODO:
  * setupGraphics, learn SDL and opengl
@@ -27,6 +28,13 @@
  * */
 
 int main(int argc, char *argv[]){
+	int width = 64;
+	int height = 32;
+	int zoom = 10;
+	int w_zoom = zoom * width;
+	int h_zoom = zoom * height;
+
+
 	if (argc < 2){
 		puts("usage: ./a.out game");
 		exit(1);
@@ -40,14 +48,24 @@ int main(int argc, char *argv[]){
 	
 	SDL_Window *window = NULL;
 	SDL_GLContext glcontext = NULL;
-	glcontext = setupGraphics(window, glcontext);
-
-	//setupInput();
+	window = setupWindow(window);
+	glcontext = setupOpenGL(window, glcontext);
 
 	initialize(window);
+	for(int i = 0; i < 32; i+=2){
+		c8->gfx[i] = 255;	
+	}
 	SDL_Event e;
-	SDL_Delay(10000);
-	quit(window);
+	while (true){
+		if(e.type == SDL_QUIT)
+			break;
+		if(SDL_PollEvent(&e))
+			if(e.key.keysym.sym == SDLK_ESCAPE)
+				break;
+		glDrawPixels(width, height, GL_LUMINANCE, GL_UNSIGNED_BYTE, c8->gfx);
+		SDL_GL_SwapWindow(window);
+	}
+	quit(window, glcontext);
 	return 0;
 }
 

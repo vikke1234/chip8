@@ -20,9 +20,10 @@
 #include <GL/gl.h>
 #include <SDL2/SDL.h>
 
-SDL_GLContext setupGraphics(SDL_Window *window, SDL_GLContext glcontext);
+SDL_GLContext setupOpenGL(SDL_Window *window, SDL_GLContext glcontext);
+SDL_Window *setupWindow(SDL_Window * window);
 void setupInput();
-void quit(SDL_Window *window);
+void quit(SDL_Window *window, SDL_GLContext context);
 void initialize(SDL_Window *window);
 void draw();
 

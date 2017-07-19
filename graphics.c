@@ -25,7 +25,13 @@
  DrawPixels sends your data to the GPU and uses the set parameters to place it in the frame buffer
  you usually set the zoom and storing once. change the viewport if your window changes size
   */
-SDL_GLContext setupGraphics(SDL_Window *window, SDL_GLContext glcontext){
+SDL_Window *setupWindow(SDL_Window *window){
+	int width = 64;
+	int height = 32;
+	int zoom = 10;
+	int w_zoom = width * zoom;
+	int h_zoom = height * zoom;
+
 	if(SDL_Init(SDL_INIT_EVERYTHING)<0){
 		printf("could not initialize SDL: %s\n", SDL_GetError());	
 		exit(1);
@@ -33,24 +39,40 @@ SDL_GLContext setupGraphics(SDL_Window *window, SDL_GLContext glcontext){
 	if(SDL_CreateWindow("CHIP 8 Emulator", 
 				SDL_WINDOWPOS_UNDEFINED, 
 				SDL_WINDOWPOS_UNDEFINED,
-				64, 32, 
-				SDL_WINDOW_OPENGL )){
+				w_zoom, h_zoom, 
+				SDL_WINDOW_OPENGL )<0){
 
 		printf("could not create window: %s\n", SDL_GetError());
 		exit(1);
 	}
-	glcontext = SDL_GL_CreateConext(window);
+	SDL_SetWindowSize(window, w_zoom, h_zoom);
+
+	return window;
+}
+SDL_GLContext setupOpenGL(SDL_Window *window, SDL_GLContext glcontext){
+	int width = 64;
+	int height = 32;
+	int zoom = 10;
+	int w_zoom = width * zoom;
+	int h_zoom = height * zoom;
+	
+
+	glcontext = SDL_GL_CreateContext(window);
+	glPixelZoom(zoom, -zoom);
+	glRasterPos2i(-1, 1);
+	SDL_GL_SetSwapInterval(0);
+
 	return glcontext;
 	
 }
 
-void quit(SDL_Window *window){
+void quit(SDL_Window *window, SDL_GLContext context){
+	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 
-void draw(SDL_Renderer *renderer){
-	puts("drawing");
-    SDL_RenderSetLogicalSize( renderer, 500, 500 );
-	SDL_RenderPresent(renderer);
+void draw(){
+	glDrawPixels(64, 32, GL_LUMINANCE, GL_UNSIGNED_BYTE, c8->gfx);
+	
 }
