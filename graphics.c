@@ -36,7 +36,7 @@ SDL_Window *setupWindow(SDL_Window *window){
 		printf("could not initialize SDL: %s\n", SDL_GetError());	
 		exit(1);
 	}
-	if((window =SDL_CreateWindow("CHIP 8 Emulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w_zoom, h_zoom, SDL_WINDOW_OPENGL ))<0){
+	if((window = SDL_CreateWindow("CHIP 8 Emulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w_zoom, h_zoom, SDL_WINDOW_OPENGL ))<0){
 
 		printf("could not create window: %s\n", SDL_GetError());
 		exit(1);

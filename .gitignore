@@ -53,3 +53,5 @@ dkms.conf
 
 #vim stuff
 *.swp
+*.json
+*.gch
