@@ -36,7 +36,11 @@ SDL_Window *setupWindow(SDL_Window *window){
 		printf("could not initialize SDL: %s\n", SDL_GetError());	
 		exit(1);
 	}
-	if((window = SDL_CreateWindow("CHIP 8 Emulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w_zoom, h_zoom, SDL_WINDOW_OPENGL ))<0){
+	if((window = SDL_CreateWindow("CHIP 8 Emulator", 
+					SDL_WINDOWPOS_UNDEFINED, 
+					SDL_WINDOWPOS_UNDEFINED, 
+					w_zoom, h_zoom, 
+					SDL_WINDOW_OPENGL ))<0){
 
 		printf("could not create window: %s\n", SDL_GetError());
 		exit(1);
@@ -56,7 +60,7 @@ SDL_GLContext setupOpenGL(SDL_Window *window, SDL_GLContext glcontext){
 	}
 	glPixelZoom(zoom, -zoom);
 	glRasterPos2i(-1, 1);
-	SDL_GL_SetSwapInterval(0);
+	SDL_GL_SetSwapInterval(1);
 
 	return glcontext;
 	

@@ -27,7 +27,7 @@ void initialize(SDL_Window *window){
 	memset(c8->memory, 0, sizeof(c8->memory));
 	memset(c8->V, 0, sizeof(c8->V));
 	c8-> I = c8->sp = c8->opcode = 0;
-
+	srand(time(NULL));
 	c8->pc = 0x200; /* counter starts at 0x200 */
 
 	//load font into memory

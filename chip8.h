@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <GL/gl.h>
 #include <SDL2/SDL.h>
+#include <time.h>
 
 SDL_GLContext setupOpenGL(SDL_Window *window, SDL_GLContext glcontext);
 SDL_Window *setupWindow(SDL_Window * window);
