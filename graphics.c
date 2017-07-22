@@ -73,7 +73,14 @@ void quit(SDL_Window *window, SDL_GLContext context){
 	exit(1);
 }
 
-void draw(){
-	glDrawPixels(64, 32, GL_LUMINANCE, GL_UNSIGNED_BYTE, c8->gfx);
-	
+void draw(SDL_Window *window){
+	short width = 64;
+	short height = 32;
+
+	glDrawPixels(width, 
+				height, 
+				GL_LUMINANCE, 
+				GL_UNSIGNED_BYTE, 
+				c8->gfx);
+	SDL_GL_SwapWindow(window);
 }

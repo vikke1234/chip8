@@ -16,6 +16,7 @@
  * =====================================================================================
  */
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include "chip8.h"
@@ -23,11 +24,15 @@
 
 void emulateCycle(){
 	c8->opcode = c8->memory[c8->pc] << 8 | c8->memory[c8->pc+1];
+	printf("opcode: %X\n", c8->opcode);
 	int firstNibble = 0xF000;
 	int secondNibble = 0x000F;
 	unsigned short positionX = 0;
 	unsigned short positionY = 0;
-
+	if(c8->delay_timer)
+		c8->delay_timer--;
+	if(c8->sound_timer)
+		c8->sound_timer--;
 	switch(c8->opcode & firstNibble){
 		case 0x0000:
 			switch(c8->opcode & secondNibble){
@@ -37,8 +42,11 @@ void emulateCycle(){
 					break;
 				case 0x000E:
 					c8->sp--;
-					c8->pc = c8->sp;
+					c8->pc = c8->stack[c8->sp];
 					c8->pc += 2;
+					break;
+				default:
+					printf("unkown opcode: %X\n", c8->opcode);
 					break;
 			}
 			break;
@@ -47,9 +55,8 @@ void emulateCycle(){
 			c8->pc = 0x1000 & 0x0FFF;
 			break;
 		case 0x2000:
-			//double check this
 			c8->sp++;
-			c8->sp = c8->pc;
+			c8->stack[c8->sp] = c8->pc;
 			c8->pc = c8->opcode & 0x0FFF;
 			break;
 		case 0x3000:
@@ -70,10 +77,12 @@ void emulateCycle(){
 		case 0x6000:
 			c8->V[(c8->opcode & 0x0F00) >> 8] = 
 				c8->opcode & 0x00FF;
+			c8->pc += 2;
 			break;
 		case 0x7000:
 			c8->V[(c8->opcode & 0x0F00) >> 8] += 
 				c8->opcode & 0x00FF;
+			c8->pc += 2;
 			break;
 		case 0x8000:
 			switch(c8->opcode & 0x000F){
@@ -140,6 +149,9 @@ void emulateCycle(){
 					c8->V[positionX] <<= 1;
 					c8->pc+=2;
 					break;
+				default:
+					printf("unkown opcode: %X\n", c8->opcode);
+					break;
 			}
 		case 0x9000:
 			if(c8->V[(c8->opcode & 0x0F00) >> 8] != c8->V[(c8->opcode & 0x00F0) >> 4])
@@ -158,8 +170,6 @@ void emulateCycle(){
 			c8->pc += 2;
 			break;
 		case 0xD000:
-			//incomplete, fix this
-			;
 			c8->V[0xF] = 0;
 			int xCoordinate = c8->V[(c8->opcode & 0x00F0) >> 4];
 			int yCoordinate = c8->V[(c8->opcode & 0x0F00) >> 8];
@@ -179,17 +189,25 @@ void emulateCycle(){
 		case 0xE000:
 			switch(c8->opcode & 0x00F0){
 				case 0x0090:
-					//fix this
 					//if key pressed skip instruction
-					
-					c8->pc += 2;
+					;
+					short key1 = (c8->opcode & 0x0F00) >> 8;
+					if(c8->key[key1] == 1)
+						c8->pc += 4;
+					else c8->pc += 2;
 					break;
 				case 0x00A0:
-					//fix this
 					//if key not pressed skip next instruction
-
-					c8->pc += 2;
+					;
+					short key2 = (c8->opcode & 0x0F00) >> 8;
+					if(c8->key[key2] == 0)
+						c8->pc += 4;
+					else c8->pc += 2;
 					break;
+				default:
+					printf("unkown opcode: %X\n", c8->opcode);
+					break;
+
 			}
 			break;
 		case 0xF000:
@@ -199,13 +217,16 @@ void emulateCycle(){
 					c8->pc+=2;
 					break;
 				case 0x000A:
-					//still broken
 					;
-					SDL_Event e;
-					for(int i = 0; i < 16; i++){
-
-					}
-						
+					char keypress = 0;
+					for(int i = 0; i <16; i++){
+						if(c8->key[i]){
+							keypress = 1;
+							break;
+						}
+					}					
+					if(!keypress)
+						return;
 					c8->pc+=2;
 					break;
 				case 0x0015:
@@ -218,12 +239,43 @@ void emulateCycle(){
 					break;
 				case 0x001E:
 					c8->I += c8->V[(c8->opcode & 0x0F00) >> 8];
+					c8->pc += 2;
+					break;
+				case 0x0029:
+					c8->I = c8->V[(c8->opcode & 0x0F00) >> 8] * 0x5;
+					c8->pc += 2;
+					break;
+				case 0x0033:
+					positionX = (c8->opcode & 0x0F00) >> 8;
 
+					c8->memory[c8->I] = c8->V[positionX] / 100;
+				   	c8->memory[c8->I + 1] = (c8->V[positionX] / 10) % 10;
+					c8->memory[c8->I + 2] = (c8->V[positionX] / 100) % 10;
+					c8->pc += 2;
+					break;
+				case 0x0055:
+					positionX = (c8->opcode & 0x0F00) >> 8;
+					for(int i = 0; i < positionX; i++){
+						c8->memory[c8->I + i] = c8->V[i];
+					}
+					c8->pc += 2;
+					break;
+				case 0x0065:
+					positionX = (c8->opcode & 0x0F00) >> 8;
+					for(int i = 0; i < positionX; i++){
+						c8->V[i] = c8->memory[c8->I + i];
+					}
+					c8->pc += 2;
+					break;
+				default:
+					printf("unkown opcode: %X\n", c8->opcode);
+					break;
 			}
 
 		default:
-			printf("unknown opcode: %X", c8->opcode);
-			c8->pc+=2;
+			printf("unknown opcode: %X\n", c8->opcode);
+			break;
 	}
+
 }
 

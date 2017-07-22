@@ -45,8 +45,6 @@ typedef struct{
 	unsigned char sound_timer;
 	unsigned char key[16];
 
-	
-
 }CH8;
 
 CH8 *c8;
