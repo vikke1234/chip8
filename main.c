@@ -21,12 +21,12 @@
 
 
 /* TODO:
- * setupGraphics, learn SDL and opengl
- * fix graphics setup function, almost done
+ * setupGraphics, learn SDL and opengl; DONE
+ * fix graphics setup function, almost done; DONE
  *
- * initialize funcition
- * start making emulation cycle function
- * 
+ * initialize funcition; DONE
+ * start making emulation cycle function; DONE
+ * figure out some way to make the code look better;
  * */
 void emulateCycle();
 
