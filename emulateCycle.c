@@ -28,8 +28,9 @@
 
 
 void emulateCycle(){
-	c8->opcode = c8->memory[c8->pc] << 8 | c8->memory[c8->pc+1];
-	printf("opcode: %X\n", c8->opcode);
+	c8->opcode = (unsigned short)(c8->memory[c8->pc] << 8);
+	c8->opcode |= (unsigned short)(c8 -> memory[c8->pc + 1]);
+	printf("executing opcode: %X at: %X\n", c8->opcode, c8->pc);
 	int firstNibble = 0xF000;
 	int secondNibble = 0x000F;
 	unsigned short positionX = 0;
@@ -57,11 +58,11 @@ void emulateCycle(){
 			break;
 
 		case 0x1000:
-			c8->pc = 0x1000 & 0x0FFF;
+			c8->pc = c8->opcode& 0x0FFF;
 			break;
 		case 0x2000:
-			c8->sp++;
 			c8->stack[c8->sp] = c8->pc;
+			c8->sp++;
 			c8->pc = c8->opcode & 0x0FFF;
 			break;
 		case 0x3000:
@@ -275,6 +276,7 @@ void emulateCycle(){
 				default:
 					printf("unkown opcode: %X\n", c8->opcode);
 					break;
+
 			}
 
 		default:
