@@ -1,7 +1,7 @@
 CC = clang
-OBJS = main.c emulateCycle.c graphics.c init.c chip8.h 
+OBJS = main.c cpu.c graphics.c init.c chip8.h 
 OBJ_NAME = a.out
-CFLAGS = -std=c11 -g -Wall -Werror
+CFLAGS = -std=c11 -g -Wall -fsanitize=address -fno-omit-frame-pointer -O2
 LFLAGS = -lGL -lSDL2
 
 all:

@@ -19,37 +19,31 @@
 #include <stdlib.h>
 #include <GL/gl.h>
 #include <SDL2/SDL.h>
-#include <time.h>
-
-SDL_GLContext setupOpenGL(SDL_Window *window, SDL_GLContext glcontext);
-SDL_Window *setupWindow(SDL_Window * window);
-void setupInput();
-void quit(SDL_Window *window, SDL_GLContext context);
-void initialize(SDL_Window *window);
-void draw();
+#include <stdint.h>
 
 typedef struct{
 	char *game;
 	FILE *fp;
-	unsigned char V[16], 
-				  memory[4096], 
-				  gfx[64*32];
+	uint8_t V[16], 
+			sp,
+		   	memory[4096], 
+			gfx[64*32];
+	
+	uint16_t I, 
+			 pc, 
+			 stack[16], 
+			 opcode;
 
-	unsigned short opcode,
-				   I, 
-				   pc, 
-				   stack[16],
-				   sp;
-
-	unsigned char delay_timer;
-	unsigned char sound_timer;
-	unsigned char key[16];
+	uint8_t delay_timer;
+	uint8_t sound_timer;
+	uint8_t key[16];
+	uint8_t flag;
 
 }CH8;
 
 CH8 *c8;
   
-static char fontset[80] =
+static uint8_t fontset[80] =
 { 
   0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
   0x20, 0x60, 0x20, 0x20, 0x70, // 1

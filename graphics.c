@@ -15,8 +15,9 @@
  *
  * =====================================================================================
  */
+#include "main.h"
+#include <string.h>
 #include "chip8.h"
-
 /*if you just need to blit some pixels
  glPixelZoom, glPixelStore*, glViewPort, glRasterPos, glDrawPixels
  PixelZoom and RasterPos set up the draw orientation on the screen and how it's flipped
@@ -56,6 +57,7 @@ SDL_GLContext setupOpenGL(SDL_Window *window, SDL_GLContext glcontext){
 
 	if(glcontext == NULL){
 		printf("could not initialize glcontext: %s", SDL_GetError());
+		free(c8);
 		quit(window, NULL);
 	}
 	glPixelZoom(zoom, -zoom);
@@ -69,6 +71,9 @@ SDL_GLContext setupOpenGL(SDL_Window *window, SDL_GLContext glcontext){
 void quit(SDL_Window *window, SDL_GLContext context){
 	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(window);
+	window = NULL;
+	context = NULL;
+	free(c8);
 	SDL_Quit();
 	exit(1);
 }
@@ -76,11 +81,11 @@ void quit(SDL_Window *window, SDL_GLContext context){
 void draw(SDL_Window *window){
 	short width = 64;
 	short height = 32;
-
 	glDrawPixels(width, 
 				height, 
 				GL_LUMINANCE, 
 				GL_UNSIGNED_BYTE, 
 				c8->gfx);
+	
 	SDL_GL_SwapWindow(window);
 }

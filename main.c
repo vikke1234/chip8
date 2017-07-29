@@ -15,18 +15,11 @@
  *
  * =====================================================================================
  */
+#include "main.h"
 #include "chip8.h"
-#include <stdbool.h>
-#include <stdint.h>
-
 
 /* TODO:
- * setupGraphics, learn SDL and opengl; DONE
- * fix graphics setup function, almost done; DONE
- *
- * initialize funcition; DONE
- * start making emulation cycle function; DONE
- * figure out some way to make the code look better;
+ * figure out some way to make the code look better; maybe soon done
  * */
 void emulateCycle();
 
@@ -48,28 +41,36 @@ int main(int argc, char *argv[]){
 	glcontext = setupOpenGL(window, glcontext);
 
 	initialize(window);
+
 	const uint8_t *state = SDL_GetKeyboardState(NULL);
 	SDL_Scancode codes[] = {SDL_SCANCODE_0, SDL_SCANCODE_1, SDL_SCANCODE_2, SDL_SCANCODE_3, SDL_SCANCODE_4, 
 							SDL_SCANCODE_5, SDL_SCANCODE_6, SDL_SCANCODE_7, SDL_SCANCODE_8, SDL_SCANCODE_9,
 							SDL_SCANCODE_A, SDL_SCANCODE_B, SDL_SCANCODE_C, SDL_SCANCODE_D, SDL_SCANCODE_E, 
 							SDL_SCANCODE_F
 	};
+
 	SDL_GL_SwapWindow(window);
-	SDL_Event e;
 	draw(window);
 	//SDL_GetTicks to get the time
+	SDL_Event e;
+	unsigned long start = SDL_GetTicks();
+	(void)start;
 	while (true){
-		if(e.type == SDL_QUIT)
-			break;
+		SDL_PumpEvents();
+
 		if(SDL_PollEvent(&e))
 			if(e.key.keysym.sym == SDLK_ESCAPE)
 				break;
-		
-		SDL_PumpEvents();
+
 		for(int i = 0; i < sizeof(codes)/ sizeof(SDL_Scancode); i++)
 			c8->key[i] = state[codes[i]];
+
 		emulateCycle();	
-		draw(window);
+
+		if(c8->flag){
+			draw(window);
+			c8->flag = 0;
+		}
 	}
 	quit(window, glcontext);
 	return 0;
