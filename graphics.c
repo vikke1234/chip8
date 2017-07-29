@@ -27,14 +27,15 @@
  you usually set the zoom and storing once. change the viewport if your window changes size
   */
 SDL_Window *setupWindow(SDL_Window *window){
-	int width = 64;
-	int height = 32;
-	int zoom = 10;
-	int w_zoom = width * zoom;
-	int h_zoom = height * zoom;
+	uint8_t width = 64;
+	uint8_t height = 32;
+	uint8_t zoom = 10;
+	uint8_t w_zoom = width * zoom;
+	uint8_t h_zoom = height * zoom;
 
 	if(SDL_Init(SDL_INIT_EVERYTHING)<0){
 		printf("could not initialize SDL: %s\n", SDL_GetError());	
+		free(c8);
 		exit(1);
 	}
 	if((window = SDL_CreateWindow("CHIP 8 Emulator", 
@@ -51,7 +52,7 @@ SDL_Window *setupWindow(SDL_Window *window){
 	return window;
 }
 SDL_GLContext setupOpenGL(SDL_Window *window, SDL_GLContext glcontext){
-	int zoom = 10;
+	uint8_t zoom = 10;
 
 	glcontext = SDL_GL_CreateContext(window);
 

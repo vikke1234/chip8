@@ -19,7 +19,11 @@
 #include "chip8.h"
 
 /* TODO:
+ * bugfixes
  * figure out some way to make the code look better; maybe soon done
+ * make program run at 60Hz
+ * sounds
+ *
  * */
 void emulateCycle();
 
@@ -53,8 +57,7 @@ int main(int argc, char *argv[]){
 	draw(window);
 	//SDL_GetTicks to get the time
 	SDL_Event e;
-	unsigned long start = SDL_GetTicks();
-	(void)start;
+	
 	while (true){
 		SDL_PumpEvents();
 
@@ -71,6 +74,8 @@ int main(int argc, char *argv[]){
 			draw(window);
 			c8->flag = 0;
 		}
+		//nanosleep here
+			
 	}
 	quit(window, glcontext);
 	return 0;

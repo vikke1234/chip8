@@ -126,7 +126,7 @@ void emulateCycle(){
 							columnHeight-1 - (yCoordinate+y) : 
 							(yCoordinate+y);
 
-						coordinate = ((realY)*columnWidth)+ (realX);
+						coordinate = (realY * columnWidth) + (realX);
 
 						if(c8->gfx[coordinate] == 255)
 							c8->V[0xF] = 1;
