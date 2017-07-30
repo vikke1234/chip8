@@ -265,7 +265,7 @@ static inline void neqVx(){
 	else c8->pc += 2;
 }
 static inline void eqVxWithShift(){ /* 0x5XY0 */
-	if(c8->V[shift8(c8->opcode)] == shift4(c8->opcode))
+	if(c8->V[shift8(c8->opcode)] == c8->V[shift4(c8->opcode)])
 		c8->pc += 4;
 	else c8->pc += 2;
 }
