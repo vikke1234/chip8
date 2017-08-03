@@ -19,6 +19,7 @@
 #include "chip8.h"
 
 /* TODO:
+ * fix memory leaks
  * bugfixes
  * figure out some way to make the code look better; maybe soon done
  * make program run at 60Hz
