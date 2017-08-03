@@ -40,6 +40,7 @@ static inline void eqVxWithShift();
 static inline void setVx();
 static inline void addVx();
 static void opcode_8000();
+static void vXnotEqVy();
 
 void emulateCycle(){
 	c8->opcode = (c8->memory[c8->pc] << 8)|c8->memory[c8->pc + 1];
@@ -84,9 +85,7 @@ void emulateCycle(){
 			opcode_8000();
 			break;
 		case 0x9000:
-			if(c8->V[shift8(c8->opcode)] != c8->V[shift4(c8->opcode)])
-				c8->pc += 4;
-			else c8->pc += 2;
+			vXnotEqVy();
 			break;
 		case 0xA000:
 			c8->I = c8->opcode & 0x0FFF;
@@ -265,7 +264,7 @@ static inline void neqVx(){
 	else c8->pc += 2;
 }
 static inline void eqVxWithShift(){ /* 0x5XY0 */
-	if(c8->V[shift8(c8->opcode)] == shift4(c8->opcode))
+	if(c8->V[shift8(c8->opcode)] == c8->V[shift4(c8->opcode)])
 		c8->pc += 4;
 	else c8->pc += 2;
 }
@@ -347,6 +346,12 @@ static void opcode_8000(){
 			printf("unkown opcode: %X\n", c8->opcode);
 			break;
 	}
+}
+
+static void vXnotEqVy(){
+	if(c8->V[shift8(c8->opcode)] != c8->V[shift4(c8->opcode)])
+		c8->pc += 4;
+	else c8->pc += 2;
 }
 
 /* 
