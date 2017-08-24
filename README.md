@@ -1,4 +1,3 @@
 # chip8
-
 ## known issues
-it doesn't work.
+I don't know...
