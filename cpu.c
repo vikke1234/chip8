@@ -67,7 +67,7 @@ void emulateCycle(){
 			break;
 		case 0x3000:
 			;
-			int entry = shift8(c8->opcode) & 0x0F;
+			int entry = shift8(c8->opcode);
 			if(c8->V[entry] == FF(c8->opcode))
 				c8->pc+=4;
 			else c8->pc += 2;
@@ -83,11 +83,11 @@ void emulateCycle(){
 			else c8->pc += 2;
 			break;
 		case 0x6000:
-			c8->V[shift8(c8->opcode)&0xF] = FF(c8->opcode);
+			c8->V[shift8(c8->opcode)] = FF(c8->opcode);
 			c8->pc += 2;
 			break;
 		case 0x7000:
-			c8->V[shift8(c8->opcode)&0xF] += FF(c8->opcode);
+			c8->V[shift8(c8->opcode)] += FF(c8->opcode);
 			c8->pc += 2;
 			break;
 		case 0x8000:
@@ -299,11 +299,11 @@ void emulateCycle(){
 }
 
 static int shift4(int opcode){
-	return opcode >> 4;
+	return (opcode & 0x00F0) >> 4;
 }
 
 static int shift8(int opcode){
-	return opcode >> 8;
+	return (opcode & 0x0F00) >> 8;
 }
 
 static int FF(int opcode){

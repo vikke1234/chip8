@@ -48,7 +48,8 @@ void initialize(SDL_Window *window){
 	size_t sz = ftell(c8->fp);
 	rewind(c8->fp);
 	printf("filesize: %lu\n", sz);
-	char *buffer = malloc(sz * 2);
+	char buffer[sz*2];
+	memset(buffer, 0, sz*2);
 
 	size_t bytesRead = fread(buffer, 1, sz, c8->fp);
 	if(bytesRead != sz){
@@ -59,6 +60,5 @@ void initialize(SDL_Window *window){
 	}
 	for(int i = 0; i < sz; i++)
 		c8->memory[i + 512] = buffer[i];
-	free(buffer);
 	puts("done");
 }
