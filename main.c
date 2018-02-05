@@ -17,6 +17,7 @@
  */
 #include "main.h"
 #include "chip8.h"
+#include <stdbool.h>
 
 /* TODO:
  * figure out some way to make the code look better; maybe soon done
@@ -37,10 +38,17 @@ int main(int argc, char *argv[]){
 	
 	SDL_Window *window = NULL;
 	SDL_GLContext glcontext = NULL;
-	window = setupWindow(window);
-	glcontext = setupOpenGL(window, glcontext);
 
-	initialize(window);
+	if(initialize(window) == false){
+		quit(window,glcontext);
+	}
+	puts("setting up opengl");
+	glcontext = setupOpenGL(window);
+	if(glcontext == NULL){
+		quit(window,glcontext);
+
+	}
+
 
 	const uint8_t *state = SDL_GetKeyboardState(NULL);
 	SDL_Scancode codes[] = {SDL_SCANCODE_0, SDL_SCANCODE_1, SDL_SCANCODE_2, SDL_SCANCODE_3, SDL_SCANCODE_4, 
@@ -50,6 +58,7 @@ int main(int argc, char *argv[]){
 	};
 
 	SDL_GL_SwapWindow(window);
+	puts("drawing black screen");
 	draw(window);
 	//SDL_GetTicks to get the time
 	SDL_Event e;

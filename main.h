@@ -24,7 +24,7 @@
 #include <GL/gl.h>
 
 void quit(SDL_Window *window, SDL_GLContext context);
-void initialize(SDL_Window *window);
 void draw();
-SDL_GLContext setupOpenGL(SDL_Window *window, SDL_GLContext glcontext);
+bool initialize(SDL_Window *window);
+SDL_GLContext setupOpenGL(SDL_Window *window);
 SDL_Window *setupWindow(SDL_Window * window);

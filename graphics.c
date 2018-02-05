@@ -50,22 +50,20 @@ SDL_Window *setupWindow(SDL_Window *window){
 
 	return window;
 }
-SDL_GLContext setupOpenGL(SDL_Window *window, SDL_GLContext glcontext){
+SDL_GLContext setupOpenGL(SDL_Window *window ){
 	int zoom = 10;
-
-	glcontext = SDL_GL_CreateContext(window);
+	SDL_GLContext glcontext = SDL_GL_CreateContext(window);
 
 	if(glcontext == NULL){
 		printf("could not initialize glcontext: %s", SDL_GetError());
-		free(c8);
-		quit(window, NULL);
 	}
-	glPixelZoom(zoom, -zoom);
-	glRasterPos2i(-1, 1);
-	SDL_GL_SetSwapInterval(1);
-
+	else{
+		glPixelZoom(zoom, -zoom);
+		glRasterPos2i(-1, 1);
+		SDL_GL_SetSwapInterval(1);
+	}
 	return glcontext;
-	
+
 }
 
 void quit(SDL_Window *window, SDL_GLContext context){
@@ -75,17 +73,16 @@ void quit(SDL_Window *window, SDL_GLContext context){
 	context = NULL;
 	free(c8);
 	SDL_Quit();
-	exit(1);
 }
 
 void draw(SDL_Window *window){
 	short width = 64;
 	short height = 32;
 	glDrawPixels(width, 
-				height, 
-				GL_LUMINANCE, 
-				GL_UNSIGNED_BYTE, 
-				c8->gfx);
-	
+			height, 
+			GL_LUMINANCE, 
+			GL_UNSIGNED_BYTE, 
+			c8->gfx);
+
 	SDL_GL_SwapWindow(window);
 }

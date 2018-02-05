@@ -16,11 +16,12 @@
  * =====================================================================================
  */
 #include <stdlib.h>
-#include "chip8.h"
+#include <stdbool.h>
 #include <string.h>
 #include "main.h"
+#include "chip8.h"
 
-void initialize(SDL_Window *window){
+bool initialize(SDL_Window *window){
 	//clear everything
 	puts("initializing...");
 	memset(c8->stack, 0, sizeof(c8->stack));
@@ -39,9 +40,7 @@ void initialize(SDL_Window *window){
 	c8->fp = fopen(c8->game, "rb");
 	if(c8->fp == NULL){
 		printf("could not open: %s", c8->game);
-		quit(window, NULL);
-		free(c8);
-		exit(1);
+		return false;
 	}
 	fseek(c8->fp, 0L, SEEK_END);
 
@@ -54,11 +53,10 @@ void initialize(SDL_Window *window){
 	size_t bytesRead = fread(buffer, 1, sz, c8->fp);
 	if(bytesRead != sz){
 		fputs("error reading memory", stderr);
-		free(buffer);
-		free(c8);
-		exit(1);
+		return false;
 	}
 	for(int i = 0; i < sz; i++)
 		c8->memory[i + 512] = buffer[i];
 	puts("done");
+	return true;
 }
